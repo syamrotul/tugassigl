@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "peta_sawah",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "id": 5, "PL_2019": "SW", "PL_2023": "SW", "PERUBAHAN": "TETAP SW" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 112.674141227295053, -7.25560063177311 ], [ 112.67614275820327, -7.256093831972981 ], [ 112.675989530956699, -7.257439358731853 ], [ 112.673978423345588, -7.257271766430931 ], [ 112.674141227295053, -7.25560063177311 ] ] ] ] } }
+]
+}

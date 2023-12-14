@@ -1,0 +1,283 @@
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v8.2.0/ol.css" type="text/css">
+    <script src="https://cdn.jsdelivr.net/npm/ol@v8.2.0/dist/ol.js"></script>
+	<script type="text/javascript" src="../jquery/jquery-3.7.1.slim.min.js"> </script>
+    <style>
+        #peta {
+            height: 400px;
+            width: 100%;
+            background-color: green;
+        }
+        .map-coordinates {
+            margin-top: 10px;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 5px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <h1> PETA PENGGUNAAN LAHAN KECAMATAN TANDES DAN KECAMATAN LAKARSANTRI </h1>
+        <h3> WebGIS Series - OpenLayers </h3>
+		<h3> SYAMROTUL FAUZIAH | NUR WAHYUNI ZULIANTI | AYU MUSTIKA | </h3>
+    </center>
+	
+	<table> 
+	<tr>
+		<td><input class="tjalan" type="checkbox" checked>Jaringan Jalan</input></td>
+		<td><input class="tosm" type="checkbox" checked>OSM</input></td>
+	
+	</tr>
+	</table>
+    <div id="peta" class="peta"></div>
+    <div id="map-coordinates" class="map-coordinates"></div>
+<body>
+
+<script type="text/javascript">
+$('.tjalan').change(function()
+	{
+		if($(this).is(':checked')){peta_jalan.setVisible(true);}
+		else {peta_jalan.setVisible(false);}
+	
+	});
+	
+$('.tosm').change(function()
+	{
+		if ($(this).is(':checked')){myosm.setVisible(true);}
+		else{myosm.setVisible(false);}
+	});
+	
+		var simbol_titik = new ol.style.Style
+		({
+			image : new ol.style.Icon({src:'../gambar/ikon_lokasi.png'})
+		});
+		
+		var file_titik = new ol.source.Vector
+		({
+			url		: '../peta/titik_tandes.geojson',
+			format	: new ol.format.GeoJSON()
+		});
+		
+		var peta_titik = new ol.layer.Vector
+		({
+			source	: file_titik,
+			style	: simbol_titik
+		});
+		
+		
+		var simbol_kumuh = new ol.style.Style
+			({
+			stroke	: new ol.style.Stroke({color:'rgb(0,0,0)', width:1}),
+			fill	: new ol.style.Fill({color:'rgb(240, 128, 128)'})
+			});
+			
+		var file_kumuh = new ol.source.Vector 
+			({
+				url: '../peta/pemukiman_tidak_teratur.geojson',
+				format	: new ol.format.GeoJSON()
+			});
+			
+		var peta_kumuh = new ol.layer.Vector
+			({
+				source :file_kumuh,
+				style  :simbol_kumuh
+			});
+		
+		var simbol_hijau = new ol.style.Style
+			({
+			stroke	: new ol.style.Stroke({color:'rgb(0,0,0)', width:1}),
+			fill	: new ol.style.Fill({color:'rgb(115,255,216)'})
+			});
+			
+		var file_hijau = new ol.source.Vector 
+			({
+				url: '../peta/ruang_terbuka_hijau.geojson',
+				format	: new ol.format.GeoJSON()
+			});
+			
+		var peta_hijau = new ol.layer.Vector
+			({
+				source :file_hijau,
+				style  :simbol_hijau
+			});
+		
+		var simbol_jasa = new ol.style.Style
+			({
+			stroke	: new ol.style.Stroke({color:'rgb(0,0,0)', width:1}),
+			fill	: new ol.style.Fill({color:'rgb(255, 255, 0)'})
+			});
+			
+		var file_jasa = new ol.source.Vector 
+			({
+				url: '../peta/perdagangan_jasa.geojson',
+				format	: new ol.format.GeoJSON()
+			});
+			
+		var peta_jasa = new ol.layer.Vector
+			({
+				source :file_jasa,
+				style  :simbol_jasa
+			});
+		
+		var simbol_tertata = new ol.style.Style
+			({
+			stroke	: new ol.style.Stroke({color:'rgb(0,0,0)', width:1}),
+			fill	: new ol.style.Fill({color:'rgb(255, 255, 0)'})
+			});
+			
+		var file_tertata = new ol.source.Vector 
+			({
+				url: '../peta/pemukiman_teratur.geojson',
+				format	: new ol.format.GeoJSON()
+			});
+			
+		var peta_tertata = new ol.layer.Vector
+			({
+				source :file_tertata,
+				style  :simbol_tertata
+			});
+		
+		var simbol_industri = new ol.style.Style
+			({
+			stroke	: new ol.style.Stroke({color:'rgb(0,0,0)', width:1}),
+			fill	: new ol.style.Fill({color:'rgb(252, 182, 193)'})
+			});
+			
+		var file_industri = new ol.source.Vector 
+			({
+				url: '../peta/industri_tandes.geojson',
+				format	: new ol.format.GeoJSON()
+			});
+			
+		var peta_industri = new ol.layer.Vector
+			({
+				source :file_industri,
+				style  :simbol_industri
+			});
+		
+		var simbol_sawah = new ol.style.Style
+			({
+			stroke	: new ol.style.Stroke({color:'rgb(0,0,0)', width:1}),
+			fill	: new ol.style.Fill({color:'rgb(154, 205, 49)'})
+			});
+			
+		var file_sawah = new ol.source.Vector 
+			({
+				url: '../peta/sawah.geojson',
+				format	: new ol.format.GeoJSON()
+			});
+			
+		var peta_sawah = new ol.layer.Vector
+			({
+				source :file_sawah,
+				style  :simbol_sawah
+			});
+
+		var simbol_pendidikan = new ol.style.Style
+			({
+			stroke	: new ol.style.Stroke({color:'rgb(0,0,0)', width:1}),
+			fill	: new ol.style.Fill({color:'rgb(249, 0, 255)'})
+			});
+			
+		var file_pendidikan = new ol.source.Vector 
+			({
+				url: '../peta/fasilitas_pendidikan.geojson',
+				format	: new ol.format.GeoJSON()
+			});
+			
+		var peta_pendidikan = new ol.layer.Vector
+			({
+				source :file_pendidikan,
+				style  :simbol_pendidikan
+			});
+
+		
+		var simbol_olahraga = new ol.style.Style
+			({
+			stroke	: new ol.style.Stroke({color:'rgb(0,0,0)', width:1}),
+			fill	: new ol.style.Fill({color:'rgb(100,25,75)'})
+			});
+			
+		var file_olahraga = new ol.source.Vector 
+			({
+				url: '../peta/fasilitas_olahraga.geojson',
+				format	: new ol.format.GeoJSON()
+			});
+			
+		var peta_olahraga = new ol.layer.Vector
+			({
+				source :file_olahraga,
+				style  :simbol_olahraga
+			});
+
+		var simbol_admin = new ol.style.Style
+			({
+			stroke	: new ol.style.Stroke({color:'rgb(0,0,0)', width:1}),
+			fill	: new ol.style.Fill({color:'rgb(106, 90, 205)'})
+			});
+			
+		var file_admin = new ol.source.Vector 
+			({
+				url: '../peta/peta_batas adiministrasi.geojson',
+				format	: new ol.format.GeoJSON()
+			});
+			
+		var peta_admin = new ol.layer.Vector
+			({
+				source :file_admin,
+				style  :simbol_admin
+			});
+
+		var simbol_jalan = new ol.style.Style
+			({
+			stroke: new ol.style.Stroke({color:'rgba(255,0,0,1}', width: 2}),
+			});
+			
+		var file_peta = new ol.source.Vector
+			({
+				url: '../peta/peta_jalan1.geojson',
+				format : new ol.format.GeoJSON()
+			});
+			
+		var peta_jalan = new ol.layer.Vector
+			({
+				source : file_peta, 
+				style  : simbol_jalan
+			});
+			
+        var myosm = new ol.layer.Tile({source: new ol.source.OSM()});
+
+        var myview = new ol.View
+			({
+            center: ol.proj.fromLonLat([112.68650, -7.25957]),
+            zoom: 15
+			});
+        var mylayer = [myosm,peta_admin, peta_kumuh,peta_jasa, peta_hijau, peta_tertata, peta_industri, peta_sawah, peta_pendidikan, peta_olahraga, peta_jalan, peta_titik];
+
+        var mymap = new ol.Map
+			({
+            target: 'peta',
+            layers: mylayer,
+            view: myview
+			});
+
+        function updateMouseCoordinates(event) {
+            var coordinate = mymap.getEventCoordinate(event.originalEvent);
+            var lonLat = ol.proj.toLonLat(coordinate);
+            if (!isNaN(lonLat[0]) && !isNaN(lonLat[1])) {
+                document.getElementById('map-coordinates').innerText = 'Lon: ' + lonLat[0].toFixed(5) + ', Lat: ' + lonLat[1].toFixed(5);
+            }
+        }
+
+        mymap.on('pointermove', function(event) {
+            if (event.dragging) {
+                return;
+            }
+            updateMouseCoordinates(event);
+        });
+    </script>
+
+</body>
+</html>

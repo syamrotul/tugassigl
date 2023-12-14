@@ -1,0 +1,172 @@
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v8.2.0/ol.css" type="text/css">
+    <script src="https://cdn.jsdelivr.net/npm/ol@v8.2.0/dist/ol.js"></script>
+	<script type="text/javascript" src="../jquery/jquery-3.7.1.slim.min.js"> </script>
+	<script>
+	$(document).ready(function()
+	{
+	$('.Submenu').hide();
+	$('.Tmenu').singleclick(function(){$('.Submenu').slideToggle});
+	});
+	</script>
+    <style>
+        #peta {
+            height: 400px;
+            width: 100%;
+            background-color: green;
+        }
+        .map-coordinates {
+            margin-top: 10px;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 5px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <h1> PETA PENGGUNAAN LAHAN KECAMATAN TANDES DAN KECAMATAN LAKARSANTRI </h1>
+        <h3> WebGIS Series - OpenLayers </h3>
+    </center>
+	
+	<table> 
+	<tr>
+		<td><input class="tjalan" type="checkbox" checked>Jaringan Jalan</input></td>
+		<td><input class="tadmin" type="checkbox" checked>Administrasi</input></td>
+		<td><input class="tosm" type="checkbox" checked>OSM</input></td>
+	</tr>
+	</table>
+    <div id="peta" class="peta"></div>
+    <div id="map-coordinates" class="map-coordinates"></div>
+	
+	<div class="Tmenu"><label>TITIK</label></div>
+	<div class="Submenu">
+		<div><label>-T01</label></div>
+		<div><label>-T02</label></div>
+		<div><label>-T03</label></div>
+		<div><label>-T04</label></div>
+		<div><label>-T05</label></div>
+		<div><label>-T06</label></div>
+		<div><label>-T07</label></div>
+		<div><label>-T08</label></div>
+		<div><label>-T09</label></div>
+		<div><label>-T10</label></div>
+		<div><label>-T11</label></div>
+		<div><label>-T12</label></div>
+		<div><label>-T13</label></div>
+		<div><label>-T14</label></div>
+		<div><label>-T15</label></div>
+		<div><label>-T16</label></div>
+		<div><label>-T17</label></div>
+		<div><label>-T18</label></div>
+		<div><label>-T19</label></div>
+		<div><label>-T20</label></div>
+	</div>
+<body>
+
+<script type="text/javascript">
+$('.tjalan').change(function()
+	{
+		if($(this).is(':checked')){peta_jalan.setVisible(true);}
+		else {peta_jalan.setVisible(false);}
+	
+	});
+
+$('.tadmin').change(function()
+	{
+		if ($(this).is(':checked')){peta_admin.setVisible(true);}
+		else{peta_admin.setVisible(false);}
+	});
+	
+$('.tosm').change(function()
+	{
+		if ($(this).is(':checked')){myosm.setVisible(true);}
+		else{myosm.setVisible(false);}
+	});
+	
+		var simbol_titik = new ol.style.Style
+		({
+			image : new ol.style.Icon({src:'../gambar/ikon_lokasi.png'})
+		});
+		
+		var file_titik = new ol.source.Vector
+		({
+			url		: '../peta/titik_tandes.geojson',
+			format	: new ol.format.GeoJSON()
+		});
+		
+		var peta_titik = new ol.layer.Vector
+		({
+			source	: file_titik,
+			style	: simbol_titik
+		});
+		
+		var simbol_admin = new ol.style.Style
+			({
+			stroke	: new ol.style.Stroke({color:'rgb(0,0,0)', width:1}),
+			fill	: new ol.style.Fill({color:'rgb(25,100,75)'})
+			});
+			
+		var file_admin = new ol.source.Vector 
+			({
+				url: '../peta/peta_batas adiministrasi.geojson',
+				format	: new ol.format.GeoJSON()
+			});
+			
+		var peta_admin = new ol.layer.Vector
+			({
+				source :file_admin,
+				style  :simbol_admin
+			});
+
+		var simbol_jalan = new ol.style.Style
+			({
+			stroke: new ol.style.Stroke({color:'rgba(255,0,0,1}', width: 2}),
+			});
+			
+		var file_peta = new ol.source.Vector
+			({
+				url: '../peta/peta_jalan1.geojson',
+				format : new ol.format.GeoJSON()
+			});
+			
+		var peta_jalan = new ol.layer.Vector
+			({
+				source : file_peta, 
+				style  : simbol_jalan
+			});
+			
+        var myosm = new ol.layer.Tile({source: new ol.source.OSM()});
+
+        var myview = new ol.View
+			({
+            center: ol.proj.fromLonLat([112.68650, -7.25957]),
+            zoom: 15
+			});
+        var mylayer = [myosm,peta_admin, peta_jalan, peta_titik];
+
+        var mymap = new ol.Map
+			({
+            target: 'peta',
+            layers: mylayer,
+            view: myview
+			});
+
+        function updateMouseCoordinates(event) {
+            var coordinate = mymap.getEventCoordinate(event.originalEvent);
+            var lonLat = ol.proj.toLonLat(coordinate);
+            if (!isNaN(lonLat[0]) && !isNaN(lonLat[1])) {
+                document.getElementById('map-coordinates').innerText = 'Lon: ' + lonLat[0].toFixed(5) + ', Lat: ' + lonLat[1].toFixed(5);
+            }
+        }
+
+        mymap.on('pointermove', function(event) {
+            if (event.dragging) {
+                return;
+            }
+            updateMouseCoordinates(event);
+        });
+    </script>
+</body>
+</html>
